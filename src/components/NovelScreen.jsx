@@ -21,7 +21,7 @@ export default function NovelScreen({ stage, onChoiceSelected, onComplete }) {
       text: '試練を始める前に、1つ教えてください。あなたは普段、未知の災いや障害に直面したとき、どのように立ち向かいますか？',
       choices: [
         {
-          text: '考えるよりも先に、まず手元の剣を振るって試行錯誤する。',
+          text: '考えるよりも先に、まず実際に行動を起こして試行錯誤する。',
           value: { planningVsIntuition: -15, solidVsBold: 0 },
           label: '直感属性'
         },
