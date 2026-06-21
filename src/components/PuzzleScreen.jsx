@@ -1,63 +1,143 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { RotateCcw, Key, Lock, Unlock, Zap, HelpCircle, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Star } from 'lucide-react';
 
-const LEVELS = [
-  {
-    id: 0,
-    name: '試練01: 二択の架け橋',
-    description: '安全な迂回路か、崩落の危険がある最短ルートか。',
-    grid: [
-      ['#', '#', '#', '#', '#', '#', '#'],
-      ['#', 'S', '.', '.', '.', '.', '#'],
-      ['#', '#', '#', 'T', '#', '.', '#'],
-      ['#', '.', '.', '.', '#', '.', '#'],
-      ['#', '.', '#', '#', '#', '.', '#'],
-      ['#', '.', '.', '.', '.', 'G', '#'],
-      ['#', '#', '#', '#', '#', '#', '#']
-    ],
-    start: { r: 1, c: 1 },
-    goal: { r: 5, c: 5 }
-  },
-  {
-    id: 1,
-    name: '試練02: 秘匿の宝物庫',
-    description: 'ゲート開放へ急ぐか、危険を冒して財宝を回収するか。',
-    grid: [
-      ['#', '#', '#', '#', '#', '#', '#', '#'],
-      ['#', 'S', '.', '.', '#', '.', 'K', '#'],
-      ['#', '#', '#', '.', '#', '.', '#', '#'],
-      ['#', 'C', '.', '.', '.', '.', '.', '#'],
-      ['#', '#', '#', '.', '#', '#', '.', '#'],
-      ['#', 'G', '.', '.', '#', '.', '.', '#'],
-      ['#', '#', '#', '#', '#', '#', '#', '#']
-    ],
-    start: { r: 1, c: 1 },
-    goal: { r: 5, c: 1 }
-  },
-  {
-    id: 2,
-    name: '試練03: 脈動する魔力壁',
-    description: '障壁の周期を見極めるか、一瞬の隙に突撃するか。',
-    grid: [
-      ['#', '#', '#', '#', '#', '#', '#'],
-      ['#', 'S', '.', 'L', '.', '.', '#'],
-      ['#', '#', '.', '#', '.', '#', '#'],
-      ['#', '.', '.', 'L', '.', 'G', '#'],
-      ['#', '.', '#', '#', '.', '#', '#'],
-      ['#', '.', '.', '.', '.', '.', '#'],
-      ['#', '#', '#', '#', '#', '#', '#']
-    ],
-    start: { r: 1, c: 1 },
-    goal: { r: 3, c: 5 }
-  }
+const LEVEL_VARIATIONS = [
+  // 試練 01 variations
+  [
+    {
+      id: 0,
+      name: '試練01: 二択の架け橋 (Type-A)',
+      description: '安全な迂回路か、崩落の危険がある最短ルートか。',
+      grid: [
+        ['#', '#', '#', '#', '#', '#', '#'],
+        ['#', 'S', '.', 'T', '.', 'G', '#'],
+        ['#', '.', '#', '#', '#', '.', '#'],
+        ['#', '.', '#', '#', '#', '.', '#'],
+        ['#', '.', '.', '.', '.', '.', '#'],
+        ['#', '#', '#', '#', '#', '#', '#']
+      ],
+      start: { r: 1, c: 1 },
+      goal: { r: 1, c: 5 },
+      classifyPath: (nr, nc) => {
+        if (nr === 2 && nc === 1) return 'long_route';
+        if (nr === 1 && nc === 2) return 'short_route';
+        return null;
+      }
+    },
+    {
+      id: 0,
+      name: '試練01: 二択の架け橋 (Type-B)',
+      description: '安全な迂回路か、崩落の危険がある最短ルートか。',
+      grid: [
+        ['#', '#', '#', '#', '#', '#', '#'],
+        ['#', '.', '.', '.', '.', '.', '#'],
+        ['#', '.', '#', '#', '#', '.', '#'],
+        ['#', '.', '#', '#', '#', '.', '#'],
+        ['#', 'S', '.', 'T', '.', 'G', '#'],
+        ['#', '#', '#', '#', '#', '#', '#']
+      ],
+      start: { r: 4, c: 1 },
+      goal: { r: 4, c: 5 },
+      classifyPath: (nr, nc) => {
+        if (nr === 3 && nc === 1) return 'long_route';
+        if (nr === 4 && nc === 2) return 'short_route';
+        return null;
+      }
+    }
+  ],
+  // 試練 02 variations
+  [
+    {
+      id: 1,
+      name: '試練02: 秘匿の宝物庫 (Type-A)',
+      description: 'ゲート開放へ急ぐか、危険を冒して財宝を回収するか。',
+      grid: [
+        ['#', '#', '#', '#', '#', '#', '#', '#'],
+        ['#', 'S', '.', '.', '#', '.', 'K', '#'],
+        ['#', '#', '#', '.', '#', '.', '#', '#'],
+        ['#', 'C', '.', '.', 'L', '.', '.', '#'],
+        ['#', '#', '#', '.', '#', '#', '.', '#'],
+        ['#', 'G', '.', '.', '#', '.', '.', '#'],
+        ['#', '#', '#', '#', '#', '#', '#', '#']
+      ],
+      start: { r: 1, c: 1 },
+      goal: { r: 5, c: 1 },
+      classifyPath: (nr, nc) => {
+        if (nc >= 4) return 'get_chest';
+        return null;
+      }
+    },
+    {
+      id: 1,
+      name: '試練02: 秘匿の宝物庫 (Type-B)',
+      description: 'ゲート開放へ急ぐか、危険を冒して財宝を回収するか。',
+      grid: [
+        ['#', '#', '#', '#', '#', '#', '#', '#'],
+        ['#', 'K', '.', '#', '.', '.', 'S', '#'],
+        ['#', '#', '.', '#', '.', '#', '#', '#'],
+        ['#', '.', '.', 'L', '.', '.', 'C', '#'],
+        ['#', '.', '#', '#', '.', '#', '#', '#'],
+        ['#', '.', '.', '#', '.', '.', 'G', '#'],
+        ['#', '#', '#', '#', '#', '#', '#', '#']
+      ],
+      start: { r: 1, c: 6 },
+      goal: { r: 5, c: 6 },
+      classifyPath: (nr, nc) => {
+        if (nc <= 3) return 'get_chest';
+        return null;
+      }
+    }
+  ],
+  // 試練 03 variations
+  [
+    {
+      id: 2,
+      name: '試練03: 脈動する魔力壁 (Type-A)',
+      description: '障壁の周期を見極めるか、一瞬の隙に突撃するか。',
+      grid: [
+        ['#', '#', '#', '#', '#', '#', '#'],
+        ['#', 'S', '.', 'L', '.', '.', '#'],
+        ['#', '#', '.', '#', '.', '#', '#'],
+        ['#', '.', '.', 'L', '.', 'G', '#'],
+        ['#', '.', '#', '#', '.', '#', '#'],
+        ['#', '.', '.', '.', '.', '.', '#'],
+        ['#', '#', '#', '#', '#', '#', '#']
+      ],
+      start: { r: 1, c: 1 },
+      goal: { r: 3, c: 5 }
+    },
+    {
+      id: 2,
+      name: '試練03: 脈動する魔力壁 (Type-B)',
+      description: '障壁の周期を見極めるか、一瞬の隙に突撃するか。',
+      grid: [
+        ['#', '#', '#', '#', '#', '#', '#'],
+        ['#', '.', '.', 'L', '.', 'S', '#'],
+        ['#', '#', '.', '#', '.', '#', '#'],
+        ['#', 'G', '.', 'L', '.', '.', '#'],
+        ['#', '.', '#', '#', '.', '#', '#'],
+        ['#', '.', '.', '.', '.', '.', '#'],
+        ['#', '#', '#', '#', '#', '#', '#']
+      ],
+      start: { r: 1, c: 5 },
+      goal: { r: 3, c: 1 }
+    }
+  ]
 ];
 
 export default function PuzzleScreen({ onPuzzleComplete }) {
   const [levelIndex, setLevelIndex] = useState(0);
-  const currentLevel = LEVELS[levelIndex];
+  const [currentLevel, setCurrentLevel] = useState(null);
+  
+  // Random variation selector
+  useEffect(() => {
+    const variations = LEVEL_VARIATIONS[levelIndex];
+    const randomVar = variations[Math.floor(Math.random() * variations.length)];
+    setCurrentLevel(randomVar);
+  }, [levelIndex]);
   
   // Game states
-  const [playerPos, setPlayerPos] = useState(currentLevel.start);
+  const [playerPos, setPlayerPos] = useState({ r: 1, c: 1 });
   const [history, setHistory] = useState([]);
   const [hasKey, setHasKey] = useState(false);
   const [chestOpened, setChestOpened] = useState(false);
@@ -67,8 +147,8 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
   
   // Dynamic map cells (for crumbling tiles)
   const [crumblingTiles, setCrumblingTiles] = useState({});
-  // Lasers active state
-  const [lasersActive, setLasersActive] = useState(false);
+  // Lasers active states (key: 'r,c', value: boolean)
+  const [activeLasers, setActiveLasers] = useState({});
 
   // Telemetry references for personality diagnostics
   const undoCountRef = useRef(0);
@@ -81,17 +161,68 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
   const [level2Choice, setLevel2Choice] = useState(''); 
   const [level3Choice, setLevel3Choice] = useState(''); 
   
-  // Laser timer (lightning runes)
+  // Laser timer (lightning runes) with separate random timings for each coordinate
   useEffect(() => {
-    if (levelIndex !== 2) return;
-    const interval = setInterval(() => {
-      setLasersActive(prev => !prev);
-    }, 1500);
-    return () => clearInterval(interval);
-  }, [levelIndex]);
+    if (!currentLevel || levelIndex === 0) {
+      setActiveLasers({});
+      return;
+    }
+
+    const laserCoords = [];
+    currentLevel.grid.forEach((row, r) => {
+      row.forEach((cell, c) => {
+        if (cell === 'L') {
+          laserCoords.push(`${r},${c}`);
+        }
+      });
+    });
+
+    // Initialize all lasers as inactive (false)
+    const initialStates = {};
+    laserCoords.forEach(coord => {
+      initialStates[coord] = false;
+    });
+    setActiveLasers(initialStates);
+
+    const timers = {};
+
+    laserCoords.forEach((coord) => {
+      const runTimer = (currentState) => {
+        // active: 600ms - 1200ms
+        // inactive: 400ms - 1000ms (shorter duration for higher density/difficulty)
+        const delay = currentState
+          ? 600 + Math.random() * 600
+          : 400 + Math.random() * 600;
+
+        timers[coord] = setTimeout(() => {
+          const nextState = !currentState;
+          setActiveLasers(prev => ({
+            ...prev,
+            [coord]: nextState
+          }));
+          runTimer(nextState);
+        }, delay);
+      };
+
+      // Stagger initial activation randomly (up to 800ms) to ensure they are out of sync
+      const initialDelay = Math.random() * 800;
+      timers[coord] = setTimeout(() => {
+        setActiveLasers(prev => ({
+          ...prev,
+          [coord]: true
+        }));
+        runTimer(true);
+      }, initialDelay);
+    });
+
+    return () => {
+      Object.values(timers).forEach(clearTimeout);
+    };
+  }, [currentLevel, levelIndex]);
 
   // Handle Level Reset / Setup
   useEffect(() => {
+    if (!currentLevel) return;
     setPlayerPos(currentLevel.start);
     setHistory([]);
     setHasKey(false);
@@ -111,25 +242,30 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
     } else if (levelIndex === 2) {
       setLunaHint('雷鳴の魔力壁（L）が一定周期で明滅しています。雷撃に触れれば初期地点にリセットされます。立ち止まり観察するのも手です。');
     }
-  }, [levelIndex]);
+  }, [currentLevel]);
 
   // Handle laser hazard collision
   useEffect(() => {
-    if (levelIndex === 2 && lasersActive) {
+    if (!currentLevel) return;
+    if (levelIndex > 0) {
       const isPlayerOnLaser = currentLevel.grid[playerPos.r][playerPos.c] === 'L';
       if (isPlayerOnLaser) {
-        // Hit! Reset to start
-        setPlayerPos(currentLevel.start);
-        setHistory([]);
-        undoCountRef.current += 1;
-        setLunaHint('警告：魔力壁の放電に被弾しました。初期位置に戻します。障壁の消える周期をよく見てください。');
-        setLevel3Choice('hit_laser');
+        const playerCoord = `${playerPos.r},${playerPos.c}`;
+        if (activeLasers[playerCoord]) {
+          // Hit! Reset to start
+          setPlayerPos(currentLevel.start);
+          setHistory([]);
+          undoCountRef.current += 1;
+          setLunaHint('警告：魔力壁の放電に被弾しました。初期位置に戻します。障壁の消える周期をよく見てください。');
+          if (levelIndex === 2) setLevel3Choice('hit_laser');
+        }
       }
     }
-  }, [lasersActive, playerPos, levelIndex]);
+  }, [activeLasers, playerPos, levelIndex, currentLevel]);
 
   // Movement handler
   const movePlayer = (dr, dc) => {
+    if (!currentLevel) return;
     const nr = playerPos.r + dr;
     const nc = playerPos.c + dc;
     
@@ -152,19 +288,12 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
     setHistory(prev => [...prev, playerPos]);
     setSteps(prev => prev + 1);
 
-    // Level 1 logic: Path classification
-    if (levelIndex === 0) {
-      if (nc >= 4 && !level1Choice) {
-        setLevel1Choice('short_route'); 
-      } else if (nr >= 3 && !level1Choice) {
-        setLevel1Choice('long_route'); 
-      }
-    }
-
-    // Level 2 logic: Path classification
-    if (levelIndex === 1) {
-      if (nc >= 4 && !level2Choice) {
-        setLevel2Choice('get_chest'); 
+    // Level 1 and 2 path classification using variation helpers
+    if (currentLevel.classifyPath) {
+      const choice = currentLevel.classifyPath(nr, nc);
+      if (choice) {
+        if (levelIndex === 0 && !level1Choice) setLevel1Choice(choice);
+        else if (levelIndex === 1 && !level2Choice) setLevel2Choice(choice);
       }
     }
 
@@ -210,11 +339,12 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
 
     // Handle Lasers (Level 3)
     if (targetCell === 'L') {
-      if (lasersActive) {
+      const laserCoord = `${nr},${nc}`;
+      if (activeLasers[laserCoord]) {
         setPlayerPos(currentLevel.start);
         setHistory([]);
         undoCountRef.current += 1;
-        setLunaHint('警告：放電中の魔力壁に衝突しました。初期位置に戻ります。');
+        setLunaHint('警告：放電中の魔力壁に衝突しました。初期位置に戻します。');
         setLevel3Choice('hit_laser');
         return;
       } else {
@@ -240,10 +370,10 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
   };
 
   const handleLevelComplete = () => {
-    if (levelIndex < LEVELS.length - 1) {
+    if (levelIndex < LEVEL_VARIATIONS.length - 1) {
       setLevelIndex(levelIndex + 1);
     } else {
-      const averageFirstMoveTime = levelFirstMoveTimeRef.current.reduce((a, b) => a + b, 0) / LEVELS.length;
+      const averageFirstMoveTime = levelFirstMoveTimeRef.current.reduce((a, b) => a + b, 0) / LEVEL_VARIATIONS.length;
       
       const metrics = {
         averageFirstMoveTime,
@@ -311,7 +441,7 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [playerPos, hasKey, chestOpened, levelIndex, crumblingTiles, lasersActive]);
+  }, [playerPos, hasKey, chestOpened, levelIndex, crumblingTiles, activeLasers]);
 
   const handleCellClick = (r, c) => {
     const dr = r - playerPos.r;
@@ -336,6 +466,10 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
       }
     }
   };
+
+  if (!currentLevel) {
+    return <div style={{ color: 'var(--text-secondary)', padding: '2rem' }}>Loading Labyrinth...</div>;
+  }
 
   return (
     <div className="glass-panel fade-in" style={{
@@ -406,10 +540,11 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
                 const tileKey = `${r},${c}`;
                 const crumbleCount = crumblingTiles[tileKey] || 0;
                 
+                const isLaserActive = isLaser && activeLasers[`${r},${c}`];
                 let cellClass = 'grid-cell cell-floor';
                 if (isWall) cellClass = 'grid-cell cell-wall';
                 else if (isCrumbling) cellClass = `grid-cell cell-floor cell-crumbling ${crumbleCount > 0 ? 'stepped' : ''}`;
-                else if (isLaser && lasersActive) cellClass = 'grid-cell cell-floor cell-laser-active';
+                else if (isLaserActive) cellClass = 'grid-cell cell-floor cell-laser-active';
 
                 return (
                   <div
@@ -459,21 +594,24 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
                     )}
 
                     {/* Render electric lightning warning */}
-                    {!isPlayer && isLaser && (
-                      <div style={{
-                        position: 'absolute',
-                        inset: '2px',
-                        border: lasersActive ? '2px solid #d99126' : '1px dashed rgba(217, 145, 38, 0.2)',
-                        borderRadius: '2px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        background: lasersActive ? 'rgba(217, 145, 38, 0.25)' : 'none',
-                        transition: 'all 0.1s'
-                      }}>
-                        <Zap size={10} style={{ color: lasersActive ? '#d99126' : 'rgba(217, 145, 38, 0.15)' }} />
-                      </div>
-                    )}
+                    {!isPlayer && isLaser && (() => {
+                      const isLaserActive = !!activeLasers[`${r},${c}`];
+                      return (
+                        <div style={{
+                          position: 'absolute',
+                          inset: '2px',
+                          border: isLaserActive ? '2px solid #d99126' : '1px dashed rgba(217, 145, 38, 0.2)',
+                          borderRadius: '2px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          background: isLaserActive ? 'rgba(217, 145, 38, 0.25)' : 'none',
+                          transition: 'all 0.1s'
+                        }}>
+                          <Zap size={10} style={{ color: isLaserActive ? '#d99126' : 'rgba(217, 145, 38, 0.15)' }} />
+                        </div>
+                      );
+                    })()}
                   </div>
                 );
               })
@@ -505,6 +643,12 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
             <div className="hud-row">
               <span className="hud-label">消費歩数 (STEPS)</span>
               <span className="hud-value">{steps}</span>
+            </div>
+            <div className="hud-row">
+              <span className="hud-label">目標評価歩数 (TARGET)</span>
+              <span className="hud-value">
+                {levelIndex === 0 ? '8手以内' : levelIndex === 1 ? '8手以内' : '6手以内'}
+              </span>
             </div>
             <div className="hud-row">
               <span className="hud-label">所持キー (KEY)</span>
