@@ -236,11 +236,11 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
 
     // Default hint for levels
     if (levelIndex === 0) {
-      setLunaHint('目の前の橋は腐食し崩れやすそうです（T）。安全な遠回り（下方向）か、崩落の危険がある直線か、あなたの選択を観測します。');
+      setLunaHint('目の前の橋は腐食し崩れやすそうです（T）。足場に注意しつつ、ゴール（G）へアバターを導いてください。');
     } else if (levelIndex === 1) {
-      setLunaHint('ゴール（G）は目の前ですが、宝箱（C）と鍵（K）が配置されています。宝箱の回収にはリスクと手数が伴います。どう進めますか？');
+      setLunaHint('このエリアには宝箱（C）と鍵（K）があります。ゲートを開く鍵を見つけ、ゴール（G）を目指しましょう。');
     } else if (levelIndex === 2) {
-      setLunaHint('雷鳴の魔力壁（L）が一定周期で明滅しています。雷撃に触れれば初期地点にリセットされます。立ち止まり観察するのも手です。');
+      setLunaHint('雷鳴の魔力壁（L）が行く手を阻んでいます。雷撃（黄色）に触れぬようタイミングを見極め、ゴール（G）へ進みましょう。');
     }
   }, [currentLevel]);
 
@@ -452,13 +452,13 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
     } else {
       const clickedCell = currentLevel.grid[r][c];
       if (clickedCell === 'T') {
-        setLunaHint('観測：崩落する木橋（T）。一度乗ると足場が傷つき、留まり続けると崩れて下に落下します。');
+        setLunaHint('崩落する木橋（T）。一度踏むと足場が傷つき、さらに負荷がかかると崩落して初期位置に戻されます。');
       } else if (clickedCell === 'C') {
         setLunaHint(chestOpened ? '開放済みの古い木製宝箱。' : 'ロックされた宝箱（C）。開けるには鍵（K）が必要です。');
       } else if (clickedCell === 'K') {
         setLunaHint('真鍮製の鍵（K）。宝箱を開けるために必要な鍵。');
       } else if (clickedCell === 'L') {
-        setLunaHint('雷鳴の魔力壁（L）。1.5秒ごとに放電（黄色）し、侵入者を消滅させてリセットします。');
+        setLunaHint('雷鳴の魔力壁（L）。一定周期で放電（黄色）し、接触すると初期位置にリセットされます。');
       } else if (clickedCell === 'G') {
         setLunaHint('ゴールゲート（G）。アバターを誘導すると次の試練への扉が開きます。');
       } else if (clickedCell === '#') {
