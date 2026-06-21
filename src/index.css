@@ -500,6 +500,12 @@ p {
   opacity: 0.7;
 }
 
+.cell-crumbling.collapsed {
+  background: #110904 !important;
+  border: 1.5px solid #d94242 !important;
+  opacity: 0.45;
+}
+
 /* Danger Electric Magic Rune Tile */
 .cell-laser-active {
   background: radial-gradient(circle, rgba(217, 145, 38, 0.4) 0%, rgba(217, 66, 66, 0.2) 80%) !important;

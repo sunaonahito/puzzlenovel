@@ -297,20 +297,31 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
       }
     }
 
-    // Handle Crumbling Tile (Level 1)
+    // Handle Crumbling Tile (Level 1) with 50% chance of collapse
     if (targetCell === 'T') {
       const tileKey = `${nr},${nc}`;
-      const stepCount = crumblingTiles[tileKey] || 0;
-      if (stepCount >= 1) {
-        // Second time stepping on it or stood still: reset player
+      const crumbleState = crumblingTiles[tileKey];
+      
+      // If it has already collapsed or was stepped on before, it definitely collapses
+      if (crumbleState) {
         setPlayerPos(currentLevel.start);
         setHistory([]);
         undoCountRef.current += 1;
-        setLunaHint('警告：木橋が踏み抜かれ崩壊しました。初期位置へ差し戻します。');
+        setLunaHint('警告：傷ついた木橋が完全に崩壊しました。初期位置へ差し戻します。');
+        return;
+      }
+
+      // 50% probability roll
+      if (Math.random() < 0.5) {
+        setCrumblingTiles(prev => ({ ...prev, [tileKey]: 'collapsed' }));
+        setPlayerPos(currentLevel.start);
+        setHistory([]);
+        undoCountRef.current += 1;
+        setLunaHint('警告：踏み出した瞬間、木橋が音を立てて崩落しました！初期位置へ差し戻します。');
         return;
       } else {
-        setCrumblingTiles(prev => ({ ...prev, [tileKey]: stepCount + 1 }));
-        setLunaHint('木橋がギシギシと音を立てています！長居すると崩壊します！');
+        setCrumblingTiles(prev => ({ ...prev, [tileKey]: 'held' }));
+        setLunaHint('木橋を渡っていますが、奇跡的に持ち堪えています！急いで渡りきりましょう！');
       }
     }
 
@@ -538,12 +549,12 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
                 const isWall = cell === '#';
                 
                 const tileKey = `${r},${c}`;
-                const crumbleCount = crumblingTiles[tileKey] || 0;
+                const crumbleState = crumblingTiles[tileKey];
                 
                 const isLaserActive = isLaser && activeLasers[`${r},${c}`];
                 let cellClass = 'grid-cell cell-floor';
                 if (isWall) cellClass = 'grid-cell cell-wall';
-                else if (isCrumbling) cellClass = `grid-cell cell-floor cell-crumbling ${crumbleCount > 0 ? 'stepped' : ''}`;
+                else if (isCrumbling) cellClass = `grid-cell cell-floor cell-crumbling ${crumbleState ? (crumbleState === 'collapsed' ? 'collapsed' : 'stepped') : ''}`;
                 else if (isLaserActive) cellClass = 'grid-cell cell-floor cell-laser-active';
 
                 return (
@@ -582,14 +593,14 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
                       <div style={{
                         fontSize: '0.45rem',
                         fontWeight: '900',
-                        color: crumbleCount > 0 ? '#ef4444' : '#8a6c50',
+                        color: crumbleState === 'collapsed' ? '#ef4444' : crumbleState === 'held' ? '#3b82f6' : '#8a6c50',
                         position: 'absolute',
                         bottom: '2px',
                         width: '100%',
                         textAlign: 'center',
                         fontFamily: 'monospace'
                       }}>
-                        {crumbleCount > 0 ? 'CRACKED' : 'WOOD'}
+                        {crumbleState === 'collapsed' ? 'COLLAPSED' : crumbleState === 'held' ? 'STABLE' : 'WOOD'}
                       </div>
                     )}
 
