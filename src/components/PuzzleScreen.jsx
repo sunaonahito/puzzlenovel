@@ -277,7 +277,7 @@ export default function PuzzleScreen({ onPuzzleComplete, avatarShape = 'circle' 
     if (levelIndex === 0) {
       setLunaHint('目の前の橋は腐食し崩れやすそうです（T）。足場に注意しつつ、ゴール（G）へアバターを導いてください。');
     } else if (levelIndex === 1) {
-      setLunaHint('このエリアには宝箱（C）と鍵（K）があります。ゲートを開く鍵を見つけ、ゴール（G）を目指しましょう。');
+      setLunaHint('このエリアには宝箱（C）と鍵（K）があります。宝箱を開くためには鍵を見つけ、ゴール（G）を目指しましょう。');
     } else if (levelIndex === 2) {
       setLunaHint('雷鳴の魔力壁（L）が行く手を阻んでいます。雷撃（黄色）に触れぬようタイミングを見極め、ゴール（G）へ進みましょう。');
     }
