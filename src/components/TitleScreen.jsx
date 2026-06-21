@@ -20,12 +20,13 @@ export default function TitleScreen({ onStart }) {
         top: '12px',
         left: '50%',
         transform: 'translateX(-50%)',
-        fontSize: '0.7rem',
+        fontSize: '0.65rem',
         fontWeight: '900',
-        letterSpacing: '0.5em',
+        letterSpacing: '0.22em',
         color: '#c5a059',
         textTransform: 'uppercase',
-        opacity: 0.8
+        opacity: 0.8,
+        whiteSpace: 'nowrap'
       }}>
         ❈ TACTICS & DESTINY OBSERVER ❈
       </div>
@@ -42,12 +43,14 @@ export default function TitleScreen({ onStart }) {
           Chronicle of the Mental Elements
         </div>
         <h1 className="glow-text" style={{
-          fontSize: '3.75rem',
+          fontSize: '2.8rem',
           margin: '0.25rem 0',
           fontWeight: '900',
-          letterSpacing: '0.08em',
-          lineHeight: '1',
-          fontFamily: 'Cinzel, serif'
+          letterSpacing: '0.05em',
+          lineHeight: '1.2',
+          fontFamily: 'Cinzel, serif',
+          whiteSpace: 'nowrap',
+          textAlign: 'center'
         }}>
           PUZZLE & NOVEL
         </h1>
