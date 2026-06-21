@@ -156,6 +156,16 @@ export default function PuzzleScreen({ onPuzzleComplete, avatarShape = 'circle' 
   const levelFirstMoveTimeRef = useRef([]); 
   const firstMoveMadeRef = useRef(false);
   
+  // Elapsed time display (CHRONICLE)
+  const [elapsed, setElapsed] = useState(0);
+
+  // Format seconds to MM′SS″
+  const formatTime = (sec) => {
+    const m = String(Math.floor(sec / 60)).padStart(2, '0');
+    const s = String(sec % 60).padStart(2, '0');
+    return `${m}′${s}″`;
+  };
+  
   // Specific actions tracked
   const [level1Choice, setLevel1Choice] = useState(''); 
   const [level2Choice, setLevel2Choice] = useState(''); 
@@ -230,6 +240,7 @@ export default function PuzzleScreen({ onPuzzleComplete, avatarShape = 'circle' 
     setStarCollected(false);
     setSteps(0);
     setCrumblingTiles({});
+    setElapsed(0); // Reset CHRONICLE timer on new trial
     
     firstMoveMadeRef.current = false;
     startTimeRef.current = Date.now();
@@ -242,6 +253,13 @@ export default function PuzzleScreen({ onPuzzleComplete, avatarShape = 'circle' 
     } else if (levelIndex === 2) {
       setLunaHint('雷鳴の魔力壁（L）が行く手を阻んでいます。雷撃（黄色）に触れぬようタイミングを見極め、ゴール（G）へ進みましょう。');
     }
+  }, [currentLevel]);
+
+  // CHRONICLE timer — counts up every second, resets when trial changes
+  useEffect(() => {
+    if (!currentLevel) return;
+    const id = setInterval(() => setElapsed(prev => prev + 1), 1000);
+    return () => clearInterval(id);
   }, [currentLevel]);
 
   // Handle laser hazard collision
@@ -706,6 +724,12 @@ export default function PuzzleScreen({ onPuzzleComplete, avatarShape = 'circle' 
 
           {/* HUD Status sheet */}
           <div className="hud-card">
+            <div className="hud-row">
+              <span className="hud-label">刻の記録 (CHRONICLE)</span>
+              <span className="hud-value" style={{ fontFamily: 'Cinzel, serif', letterSpacing: '0.05em' }}>
+                {formatTime(elapsed)}
+              </span>
+            </div>
             <div className="hud-row">
               <span className="hud-label">消費歩数 (STEPS)</span>
               <span className="hud-value">{steps}</span>
