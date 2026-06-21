@@ -31,7 +31,7 @@ export default function NovelScreen({ stage, onChoiceSelected, onComplete }) {
           label: '計画属性'
         },
         {
-          text: '過去の記録を調べ、最も安全で確実なルートを探す。',
+          text: '書庫から過去の文献を調べ、最も安全で堅実なルートを探す。',
           value: { planningVsIntuition: 0, solidVsBold: -15 },
           label: '堅実属性'
         }
