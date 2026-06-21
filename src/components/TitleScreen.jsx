@@ -39,7 +39,7 @@ export default function TitleScreen({ onStart }) {
           textTransform: 'uppercase',
           fontFamily: 'Cinzel, serif'
         }}>
-          Ogre Battle Saga
+          Chronicle of the Mental Elements
         </div>
         <h1 className="glow-text" style={{
           fontSize: '3.75rem',
