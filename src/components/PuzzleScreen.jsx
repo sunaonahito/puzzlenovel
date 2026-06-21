@@ -566,37 +566,48 @@ export default function PuzzleScreen({ onPuzzleComplete, avatarShape = 'circle' 
                   >
                     {/* Render Player Avatar (shape depends on first novel choice) */}
                     {isPlayer && (() => {
+                      const goldGradient = 'radial-gradient(circle at 40% 35%, #e8d08a, #c5a059)';
+                      const goldShadow = '0 0 8px rgba(197,160,89,0.8), 0 0 18px rgba(197,160,89,0.4)';
+
+                      // diamond: rotate a square 45deg
+                      if (avatarShape === 'triangle') {
+                        return (
+                          <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '100%',
+                            height: '100%',
+                            position: 'absolute',
+                          }}>
+                            <div style={{
+                              width: '52%',
+                              height: '52%',
+                              background: goldGradient,
+                              boxShadow: goldShadow,
+                              transform: 'rotate(45deg)',
+                              borderRadius: '2px',
+                            }} />
+                          </div>
+                        );
+                      }
+
                       const shapeStyles = {
                         circle: {
                           borderRadius: '50%',
-                          background: 'radial-gradient(circle at 40% 35%, #e8d08a, #c5a059)',
-                          boxShadow: '0 0 8px rgba(197,160,89,0.8), 0 0 18px rgba(197,160,89,0.4)',
+                          background: goldGradient,
+                          boxShadow: goldShadow,
                           width: '70%',
                           height: '70%',
                         },
                         square: {
                           borderRadius: '4px',
-                          background: 'linear-gradient(135deg, #a0c8ff, #5b9bde)',
-                          boxShadow: '0 0 8px rgba(91,155,222,0.8), 0 0 18px rgba(91,155,222,0.4)',
+                          background: goldGradient,
+                          boxShadow: goldShadow,
                           width: '70%',
                           height: '70%',
                         },
-                        triangle: null,
                       };
-
-                      if (avatarShape === 'triangle') {
-                        return (
-                          <div style={{
-                            width: 0,
-                            height: 0,
-                            borderLeft: '10px solid transparent',
-                            borderRight: '10px solid transparent',
-                            borderBottom: '18px solid #e88a8a',
-                            filter: 'drop-shadow(0 0 6px rgba(232,138,138,0.9))',
-                            position: 'absolute',
-                          }} />
-                        );
-                      }
 
                       const style = shapeStyles[avatarShape] || shapeStyles.circle;
                       return (
