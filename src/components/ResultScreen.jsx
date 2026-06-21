@@ -83,7 +83,7 @@ export default function ResultScreen({ scores, metrics, onReset }) {
   const currentType = TYPES[diagnosedTypeKey];
 
   // Symmetrical matches text formatting
-  const shareText = `【Puzunove診断結果】\n私の精神アライメントは『${currentType.name} (${currentType.english})』でした！\n${currentType.catchphrase}\n\n■ 思考特性: ${finalX >= 0 ? `計画志向 (+${finalX})` : `直感志向 (${finalX})`}\n■ 行動特性: ${finalY >= 0 ? `大胆属性 (+${finalY})` : `堅実属性 (${finalY})`}\n\n戦術RPGの解き方から本質を診断する新感覚ゲーム。あなたも属性を測ってみませんか？\n#Puzunove #性格診断 #パズノベ診断\nhttps://punaonahito.github.io/puzzlenovel/`;
+  const shareText = `【精神的属性診断結果】\n私の精神的エレメントは『${currentType.name} (${currentType.english})』でした！\n${currentType.catchphrase}\n\n■ 思考特性: ${finalX >= 0 ? `計画志向 (+${finalX})` : `直感志向 (${finalX})`}\n■ 行動特性: ${finalY >= 0 ? `大胆特性 (+${finalY})` : `堅実特性 (${finalY})`}\n\n戦術RPGの解き方から本質を診断する新感覚ゲーム。あなたも精神的エレメントを測ってみませんか？\n#Puzunove #性格診断 #精神的属性診断\nhttps://sunaonahito.github.io/puzzlenovel/`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(shareText);
@@ -151,7 +151,7 @@ export default function ResultScreen({ scores, metrics, onReset }) {
     ctx.fillStyle = '#4e3e29';
     ctx.font = 'bold 11px "Cinzel", serif';
     ctx.textAlign = 'center';
-    ctx.fillText('PUZUNOVE DIAGNOSIS // THE OBSERVER SCROLL', w / 2, 65);
+    ctx.fillText('MENTAL ELEMENT DIAGNOSIS // THE OBSERVER SCROLL', w / 2, 65);
 
     // Draw Crest/Emblem
     ctx.strokeStyle = 'rgba(143, 116, 75, 0.4)';
@@ -167,7 +167,7 @@ export default function ResultScreen({ scores, metrics, onReset }) {
     // Class Rank Box
     ctx.fillStyle = '#2b2318';
     ctx.font = 'bold 16px "Cinzel", serif';
-    ctx.fillText('ALIGNMENT STATUS', w / 2, 185);
+    ctx.fillText('ELEMENT STATUS', w / 2, 185);
 
     // Class Name
     ctx.fillStyle = currentType.accent;
@@ -221,7 +221,7 @@ export default function ResultScreen({ scores, metrics, onReset }) {
 
     ctx.fillStyle = '#8f744b';
     ctx.font = 'bold 12px "Noto Serif JP", serif';
-    ctx.fillText('▼ 属性の強み (ALIGNMENT STRENGTHS)', 80, descEndY + 35);
+    ctx.fillText('▼ 本質的な強み (ELEMENT STRENGTHS)', 80, descEndY + 35);
     ctx.fillStyle = '#2b2318';
     ctx.font = '14px "Noto Serif JP", serif';
     wrapText(currentType.strength, 80, descEndY + 58, w - 160, 20);
@@ -304,7 +304,7 @@ export default function ResultScreen({ scores, metrics, onReset }) {
 
     // Trigger file download link
     const link = document.createElement('a');
-    link.download = `puzunove_alignment_${currentType.english.toLowerCase().replace(' ', '_')}.png`;
+    link.download = `puzunove_element_${currentType.english.toLowerCase().replace(' ', '_')}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
   };
@@ -328,7 +328,7 @@ export default function ResultScreen({ scores, metrics, onReset }) {
           color: 'var(--border-gold)',
           fontFamily: 'Cinzel, serif'
         }}>
-          Alignment Crystal Plotted
+          Element Crystal Plotted
         </div>
         <h2 style={{
           fontSize: '2rem',
@@ -393,7 +393,7 @@ export default function ResultScreen({ scores, metrics, onReset }) {
           textAlign: 'center'
         }}>
           <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: 'Cinzel, serif' }}>
-            ALIGNMENT COORDINATES
+            ELEMENT COORDINATES
           </div>
           <div style={{
             display: 'flex',
@@ -456,7 +456,7 @@ export default function ResultScreen({ scores, metrics, onReset }) {
               fontFamily: 'Noto Serif JP, serif'
             }}>
               <Sword size={14} />
-              <span>本質的な強み (Alignment Strengths)</span>
+              <span>本質的な強み (Element Strengths)</span>
             </div>
             <div style={{ fontSize: '0.9rem', color: '#2b2318', lineHeight: '1.6' }}>
               {currentType.strength}
@@ -505,7 +505,7 @@ export default function ResultScreen({ scores, metrics, onReset }) {
           fontFamily: 'Cinzel, serif'
         }}>
           <Shield size={16} style={{ color: 'var(--border-gold)' }} />
-          <span>RELATION ALIGNMENT</span>
+          <span>RELATION ELEMENT</span>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

@@ -61,7 +61,7 @@ export default function TitleScreen({ onStart }) {
           fontFamily: 'Noto Serif JP, serif',
           letterSpacing: '0.15em'
         }}>
-          運命の観測盤 — パズノベ性格診断
+          運命の観測盤 — 精神的属性診断
         </div>
       </div>
 
@@ -124,7 +124,7 @@ export default function TitleScreen({ onStart }) {
           <Scroll size={18} style={{ color: '#8f744b' }} />
           <span>運命の観測プロトコル起動準備</span>
         </div>
-        この診断は、自己申告式のクイズではありません。実際に数々のパズルや物語の分岐点を通り抜けていただき、その『解き方』や『行動パターン（計画性・直感・堅実さ・大胆さ）』を方位盤上に投影することで、あなたの真の精神的属性（アライメント）を診断します。
+        この診断は、自己申告式のクイズではありません。実際に数々のパズルや物語の分岐点を通り抜けていただき、その『解き方』や『行動パターン（計画性・直感・堅実さ・大胆さ）』を精神的エレメント方位盤上に投影することで、あなたの真の精神的エレメントを診断します。
       </div>
 
       <button className="cyber-btn" onClick={onStart} style={{ padding: '1rem 3.5rem', fontSize: '1.05rem' }}>
