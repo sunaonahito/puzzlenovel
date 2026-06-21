@@ -166,7 +166,6 @@ export default function NovelScreen({ stage, onChoiceSelected, onComplete }) {
                 onClick={() => handleChoice(choice)}
               >
                 <span>{choice.text}</span>
-                <span className="choice-badge">{choice.label}</span>
               </button>
             ))}
           </div>
