@@ -49,7 +49,7 @@ export default function TitleScreen({ onStart }) {
           lineHeight: '1',
           fontFamily: 'Cinzel, serif'
         }}>
-          PUZUNOVE
+          PUZZLE & NOVEL
         </h1>
         <div style={{
           fontSize: '1.05rem',
@@ -138,7 +138,7 @@ export default function TitleScreen({ onStart }) {
         letterSpacing: '0.05em',
         fontFamily: 'Cinzel, serif'
       }}>
-        © 1995-2026 PUZUNOVE SAGA // ALL RIGHTS RESERVED
+        © 1995-2026 PUZZLE & NOVEL SAGA // ALL RIGHTS RESERVED
       </div>
     </div>
   );

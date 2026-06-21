@@ -83,7 +83,7 @@ export default function ResultScreen({ scores, metrics, onReset }) {
   const currentType = TYPES[diagnosedTypeKey];
 
   // Symmetrical matches text formatting
-  const shareText = `【精神的属性診断結果】\n私の精神的エレメントは『${currentType.name} (${currentType.english})』でした！\n${currentType.catchphrase}\n\n■ 思考特性: ${finalX >= 0 ? `計画志向 (+${finalX})` : `直感志向 (${finalX})`}\n■ 行動特性: ${finalY >= 0 ? `大胆特性 (+${finalY})` : `堅実特性 (${finalY})`}\n\n戦術RPGの解き方から本質を診断する新感覚ゲーム。あなたも精神的エレメントを測ってみませんか？\n#Puzunove #性格診断 #精神的属性診断\nhttps://sunaonahito.github.io/puzzlenovel/`;
+  const shareText = `【精神的属性診断結果】\n私の精神的エレメントは『${currentType.name} (${currentType.english})』でした！\n${currentType.catchphrase}\n\n■ 思考特性: ${finalX >= 0 ? `計画志向 (+${finalX})` : `直感志向 (${finalX})`}\n■ 行動特性: ${finalY >= 0 ? `大胆特性 (+${finalY})` : `堅実特性 (${finalY})`}\n\n戦術RPGの解き方から本質を診断する新感覚ゲーム。あなたも精神的エレメントを測ってみませんか？\n#PuzzleAndNovel #性格診断 #精神的属性診断\nhttps://sunaonahito.github.io/puzzlenovel/`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(shareText);
@@ -300,11 +300,11 @@ export default function ResultScreen({ scores, metrics, onReset }) {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#8f744b';
     ctx.font = 'bold 12px "Cinzel", serif';
-    ctx.fillText('PUZUNOVE.APP // STATUS ARCHIVE', w / 2, h - 50);
+    ctx.fillText('PUZZLE & NOVEL // STATUS ARCHIVE', w / 2, h - 50);
 
     // Trigger file download link
     const link = document.createElement('a');
-    link.download = `puzunove_element_${currentType.english.toLowerCase().replace(' ', '_')}.png`;
+    link.download = `puzzle_novel_element_${currentType.english.toLowerCase().replace(' ', '_')}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
   };
