@@ -23,16 +23,19 @@ export default function NovelScreen({ stage, onChoiceSelected, onComplete }) {
         {
           text: '考えるよりも先に、まず実際に行動を起こして試行錯誤する。',
           value: { planningVsIntuition: -15, solidVsBold: 0 },
+          avatarShape: 'triangle',
           label: '直感属性'
         },
         {
           text: '全ての選択肢とリスクを天秤にかけ、計画を立ててから進む。',
           value: { planningVsIntuition: 15, solidVsBold: 0 },
+          avatarShape: 'square',
           label: '計画属性'
         },
         {
           text: '書庫から過去の文献を調べ、最も安全で堅実なルートを探す。',
           value: { planningVsIntuition: 0, solidVsBold: -15 },
+          avatarShape: 'circle',
           label: '堅実属性'
         }
       ]
@@ -117,7 +120,7 @@ export default function NovelScreen({ stage, onChoiceSelected, onComplete }) {
   };
 
   const handleChoice = (choice) => {
-    onChoiceSelected(choice.value);
+    onChoiceSelected(choice.value, choice.avatarShape || null);
     if (currentStep < dialogues.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
