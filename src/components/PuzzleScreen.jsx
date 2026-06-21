@@ -156,14 +156,16 @@ export default function PuzzleScreen({ onPuzzleComplete, avatarShape = 'circle' 
   const levelFirstMoveTimeRef = useRef([]); 
   const firstMoveMadeRef = useRef(false);
   
-  // Elapsed time display (CHRONICLE)
+  // Elapsed time display (CHRONICLE) — in centiseconds (1/100s)
   const [elapsed, setElapsed] = useState(0);
 
-  // Format seconds to MM′SS″
-  const formatTime = (sec) => {
-    const m = String(Math.floor(sec / 60)).padStart(2, '0');
-    const s = String(sec % 60).padStart(2, '0');
-    return `${m}′${s}″`;
+  // Format centiseconds to MM′SS.cc″
+  const formatTime = (cs) => {
+    const totalSec = Math.floor(cs / 100);
+    const m = String(Math.floor(totalSec / 60)).padStart(2, '0');
+    const s = String(totalSec % 60).padStart(2, '0');
+    const c = String(cs % 100).padStart(2, '0');
+    return `${m}′${s}.${c}″`;
   };
   
   // Specific actions tracked
@@ -255,10 +257,10 @@ export default function PuzzleScreen({ onPuzzleComplete, avatarShape = 'circle' 
     }
   }, [currentLevel]);
 
-  // CHRONICLE timer — counts up every second, resets when trial changes
+  // CHRONICLE timer — counts up every 10ms (centiseconds), resets when trial changes
   useEffect(() => {
     if (!currentLevel) return;
-    const id = setInterval(() => setElapsed(prev => prev + 1), 1000);
+    const id = setInterval(() => setElapsed(prev => prev + 1), 10);
     return () => clearInterval(id);
   }, [currentLevel]);
 
