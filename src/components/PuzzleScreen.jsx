@@ -159,13 +159,39 @@ export default function PuzzleScreen({ onPuzzleComplete, avatarShape = 'circle' 
   // Elapsed time display (CHRONICLE) — in centiseconds (1/100s)
   const [elapsed, setElapsed] = useState(0);
 
-  // Format centiseconds to MM′SS.cc″
+  // Format centiseconds to MM′SS.cc″ as character array
   const formatTime = (cs) => {
     const totalSec = Math.floor(cs / 100);
     const m = String(Math.floor(totalSec / 60)).padStart(2, '0');
     const s = String(totalSec % 60).padStart(2, '0');
     const c = String(cs % 100).padStart(2, '0');
     return `${m}′${s}.${c}″`;
+  };
+
+  // Render timer string with each digit in a fixed-width slot (prevents layout shift)
+  const renderFixedTimer = (cs) => {
+    const str = formatTime(cs);
+    return (
+      <span style={{ display: 'inline-flex', alignItems: 'baseline' }}>
+        {str.split('').map((ch, i) => {
+          const isDigit = /\d/.test(ch);
+          return (
+            <span
+              key={i}
+              style={{
+                display: 'inline-block',
+                width: isDigit ? '0.65em' : '0.45em',
+                textAlign: 'center',
+                fontFamily: isDigit ? "'Courier New', monospace" : 'Cinzel, serif',
+                flexShrink: 0,
+              }}
+            >
+              {ch}
+            </span>
+          );
+        })}
+      </span>
+    );
   };
   
   // Specific actions tracked
@@ -728,14 +754,8 @@ export default function PuzzleScreen({ onPuzzleComplete, avatarShape = 'circle' 
           <div className="hud-card">
             <div className="hud-row">
               <span className="hud-label">刻の記録 (CHRONICLE)</span>
-              <span className="hud-value" style={{
-                fontFamily: 'Cinzel, serif',
-                fontVariantNumeric: 'tabular-nums',
-                display: 'inline-block',
-                minWidth: '7.5ch',
-                textAlign: 'right',
-              }}>
-                {formatTime(elapsed)}
+              <span className="hud-value">
+                {renderFixedTimer(elapsed)}
               </span>
             </div>
             <div className="hud-row">
