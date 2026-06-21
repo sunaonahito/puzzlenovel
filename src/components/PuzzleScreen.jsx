@@ -728,7 +728,13 @@ export default function PuzzleScreen({ onPuzzleComplete, avatarShape = 'circle' 
           <div className="hud-card">
             <div className="hud-row">
               <span className="hud-label">刻の記録 (CHRONICLE)</span>
-              <span className="hud-value" style={{ fontFamily: 'Cinzel, serif', letterSpacing: '0.05em' }}>
+              <span className="hud-value" style={{
+                fontFamily: 'Cinzel, serif',
+                fontVariantNumeric: 'tabular-nums',
+                display: 'inline-block',
+                minWidth: '7.5ch',
+                textAlign: 'right',
+              }}>
                 {formatTime(elapsed)}
               </span>
             </div>
