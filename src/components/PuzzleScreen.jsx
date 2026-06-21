@@ -4,8 +4,8 @@ import { RotateCcw, Key, Lock, Unlock, Zap, HelpCircle, ArrowUp, ArrowDown, Arro
 const LEVELS = [
   {
     id: 0,
-    name: '領域01: 二択の路',
-    description: '安全な遠回りか、危険な近道か。',
+    name: '試練01: 二択の架け橋',
+    description: '安全な迂回路か、崩落の危険がある最短ルートか。',
     grid: [
       ['#', '#', '#', '#', '#', '#', '#'],
       ['#', 'S', '.', '.', '.', '.', '#'],
@@ -20,8 +20,8 @@ const LEVELS = [
   },
   {
     id: 1,
-    name: '領域02: 秘匿の宝箱',
-    description: '目標に直行するか、リスクを取って財宝を探すか。',
+    name: '試練02: 秘匿の宝物庫',
+    description: 'ゲート開放へ急ぐか、危険を冒して財宝を回収するか。',
     grid: [
       ['#', '#', '#', '#', '#', '#', '#', '#'],
       ['#', 'S', '.', '.', '#', '.', 'K', '#'],
@@ -36,8 +36,8 @@ const LEVELS = [
   },
   {
     id: 2,
-    name: '領域03: 脈動する防壁',
-    description: 'タイミングを見極めるか、勢いで駆け抜けるか。',
+    name: '試練03: 脈動する魔力壁',
+    description: '障壁の周期を見極めるか、一瞬の隙に突撃するか。',
     grid: [
       ['#', '#', '#', '#', '#', '#', '#'],
       ['#', 'S', '.', 'L', '.', '.', '#'],
@@ -63,7 +63,7 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
   const [chestOpened, setChestOpened] = useState(false);
   const [starCollected, setStarCollected] = useState(false);
   const [steps, setSteps] = useState(0);
-  const [lunaHint, setLunaHint] = useState('キーボード（矢印キー / WASD）または画面下の方向キーでアバターを動かしてください。');
+  const [lunaHint, setLunaHint] = useState('アバター（盾）を操作して、緑のゴールゲートへ誘導してください。');
   
   // Dynamic map cells (for crumbling tiles)
   const [crumblingTiles, setCrumblingTiles] = useState({});
@@ -73,15 +73,15 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
   // Telemetry references for personality diagnostics
   const undoCountRef = useRef(0);
   const startTimeRef = useRef(null);
-  const levelFirstMoveTimeRef = useRef([]); // seconds before first move in each level
+  const levelFirstMoveTimeRef = useRef([]); 
   const firstMoveMadeRef = useRef(false);
   
   // Specific actions tracked
-  const [level1Choice, setLevel1Choice] = useState(''); // 'short_route' or 'long_route'
-  const [level2Choice, setLevel2Choice] = useState(''); // 'goal_direct', 'get_chest', 'inspect_chest_first'
-  const [level3Choice, setLevel3Choice] = useState(''); // 'dash_laser', 'patient_laser'
+  const [level1Choice, setLevel1Choice] = useState(''); 
+  const [level2Choice, setLevel2Choice] = useState(''); 
+  const [level3Choice, setLevel3Choice] = useState(''); 
   
-  // Laser timer
+  // Laser timer (lightning runes)
   useEffect(() => {
     if (levelIndex !== 2) return;
     const interval = setInterval(() => {
@@ -105,11 +105,11 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
 
     // Default hint for levels
     if (levelIndex === 0) {
-      setLunaHint('目の前の橋は崩れやすそうです（T）。迂回するか、リスクを背負って直進するか、あなたの判断を観測します。');
+      setLunaHint('目の前の橋は腐食し崩れやすそうです（T）。安全な遠回り（下方向）か、崩落の危険がある直線か、あなたの選択を観測します。');
     } else if (levelIndex === 1) {
-      setLunaHint('目標（G）はすぐそこですが、宝箱（C）と鍵（K）が配置されています。どう進めるか観察しています。');
+      setLunaHint('ゴール（G）は目の前ですが、宝箱（C）と鍵（K）が配置されています。宝箱の回収にはリスクと手数が伴います。どう進めますか？');
     } else if (levelIndex === 2) {
-      setLunaHint('セキュリティレーザー（L）が一定間隔で点滅しています。接触すればスタート位置にリセットされます。');
+      setLunaHint('雷鳴の魔力壁（L）が一定周期で明滅しています。雷撃に触れれば初期地点にリセットされます。立ち止まり観察するのも手です。');
     }
   }, [levelIndex]);
 
@@ -122,7 +122,7 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
         setPlayerPos(currentLevel.start);
         setHistory([]);
         undoCountRef.current += 1;
-        setLunaHint('警告：レーザーに接触しました。初期位置に差し戻します。タイミングをよく見てください。');
+        setLunaHint('警告：魔力壁の放電に被弾しました。初期位置に戻します。障壁の消える周期をよく見てください。');
         setLevel3Choice('hit_laser');
       }
     }
@@ -155,16 +155,16 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
     // Level 1 logic: Path classification
     if (levelIndex === 0) {
       if (nc >= 4 && !level1Choice) {
-        setLevel1Choice('short_route'); // went right towards crumbling tile
+        setLevel1Choice('short_route'); 
       } else if (nr >= 3 && !level1Choice) {
-        setLevel1Choice('long_route'); // went down to detour
+        setLevel1Choice('long_route'); 
       }
     }
 
     // Level 2 logic: Path classification
     if (levelIndex === 1) {
       if (nc >= 4 && !level2Choice) {
-        setLevel2Choice('get_chest'); // went right towards key
+        setLevel2Choice('get_chest'); 
       }
     }
 
@@ -177,18 +177,18 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
         setPlayerPos(currentLevel.start);
         setHistory([]);
         undoCountRef.current += 1;
-        setLunaHint('警告：足場が崩れました。初期位置へ差し戻します。');
+        setLunaHint('警告：木橋が踏み抜かれ崩壊しました。初期位置へ差し戻します。');
         return;
       } else {
         setCrumblingTiles(prev => ({ ...prev, [tileKey]: stepCount + 1 }));
-        setLunaHint('足元が崩れかけています！急いで通り抜けてください。');
+        setLunaHint('木橋がギシギシと音を立てています！長居すると崩壊します！');
       }
     }
 
     // Handle Key Pickups
     if (targetCell === 'K') {
       setHasKey(true);
-      setLunaHint('鍵を回収しました。これでセキュリティチェストを開けられます。');
+      setLunaHint('古代の鍵を回収しました。これで宝箱を開けられます。');
     }
 
     // Handle Chest Interaction
@@ -197,33 +197,29 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
         if (!chestOpened) {
           setChestOpened(true);
           setStarCollected(true);
-          setLunaHint('チェストを開放。隠されたスターを獲得しました！');
+          setLunaHint('宝箱を開錠！魔力のスターを獲得しました。');
         }
       } else {
-        setLunaHint('このチェストはロックされています。鍵（K）が必要です。');
-        // If they click/step on chest without key, note it
+        setLunaHint('宝箱には鉄の錠前（C）がかかっています。鍵（K）が必要です。');
         if (!level2Choice) {
           setLevel2Choice('inspect_chest_first');
         }
-        return; // Can't walk over locked chest
+        return; 
       }
     }
 
     // Handle Lasers (Level 3)
     if (targetCell === 'L') {
       if (lasersActive) {
-        // Hit! Reset
         setPlayerPos(currentLevel.start);
         setHistory([]);
         undoCountRef.current += 1;
-        setLunaHint('警告：アクティブなレーザーに衝突しました。初期位置に戻ります。');
+        setLunaHint('警告：放電中の魔力壁に衝突しました。初期位置に戻ります。');
         setLevel3Choice('hit_laser');
         return;
       } else {
-        // Safe passing
-        setLunaHint('レーザーが消えている隙に通過しました！');
+        setLunaHint('魔力障壁が消滅した隙に通過しました！');
         if (!level3Choice) {
-          // If they passed laser in under 3 seconds from level start
           const totalElapsed = (Date.now() - startTimeRef.current) / 1000;
           if (totalElapsed < 4) {
             setLevel3Choice('dash_laser');
@@ -247,14 +243,13 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
     if (levelIndex < LEVELS.length - 1) {
       setLevelIndex(levelIndex + 1);
     } else {
-      // Calculate final telemetry metrics
       const averageFirstMoveTime = levelFirstMoveTimeRef.current.reduce((a, b) => a + b, 0) / LEVELS.length;
       
       const metrics = {
         averageFirstMoveTime,
         totalUndos: undoCountRef.current,
         level1Choice,
-        level2Choice: level2Choice || 'goal_direct', // if not set, they went straight to goal
+        level2Choice: level2Choice || 'goal_direct', 
         level3Choice: level3Choice || 'patient_laser',
         starCollected
       };
@@ -270,7 +265,7 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
     setHistory(prev => prev.slice(0, -1));
     setSteps(prev => Math.max(0, prev - 1));
     undoCountRef.current += 1;
-    setLunaHint('手数を1手戻しました。慎重に進めるのも良い選択です。');
+    setLunaHint('時間を一手巻き戻しました。');
   };
 
   const handleReset = () => {
@@ -279,7 +274,7 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
     setSteps(0);
     setCrumblingTiles({});
     undoCountRef.current += 1;
-    setLunaHint('現在のステージをリセットしました。');
+    setLunaHint('現在の試練を初期化しました。');
   };
 
   // Keyboard navigation listener
@@ -318,29 +313,26 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [playerPos, hasKey, chestOpened, levelIndex, crumblingTiles, lasersActive]);
 
-  // Inspect Element on grid click
   const handleCellClick = (r, c) => {
     const dr = r - playerPos.r;
     const dc = c - playerPos.c;
     
-    // If adjacent, move there
     if (Math.abs(dr) + Math.abs(dc) === 1) {
       movePlayer(dr, dc);
     } else {
-      // Just inspect
       const clickedCell = currentLevel.grid[r][c];
       if (clickedCell === 'T') {
-        setLunaHint('観測：崩れる足場（T）。乗るとひびが入り、さらにもう一歩留まると崩壊して初期化されます。');
+        setLunaHint('観測：崩落する木橋（T）。一度乗ると足場が傷つき、留まり続けると崩れて下に落下します。');
       } else if (clickedCell === 'C') {
-        setLunaHint(chestOpened ? '開放済みのセキュリティチェスト。' : 'ロックされたセキュリティチェスト（C）。開けるには鍵（K）が必要です。');
+        setLunaHint(chestOpened ? '開放済みの古い木製宝箱。' : 'ロックされた宝箱（C）。開けるには鍵（K）が必要です。');
       } else if (clickedCell === 'K') {
-        setLunaHint('認証用キー（K）。チェストを開錠するのに必須のアイテム。');
+        setLunaHint('真鍮製の鍵（K）。宝箱を開けるために必要な鍵。');
       } else if (clickedCell === 'L') {
-        setLunaHint('セキュリティレーザー（L）。1.5秒ごとに活性化（赤色）し、侵入者を検知してリセットします。');
+        setLunaHint('雷鳴の魔力壁（L）。1.5秒ごとに放電（黄色）し、侵入者を消滅させてリセットします。');
       } else if (clickedCell === 'G') {
-        setLunaHint('ゴール（G）。ここまでアバターを誘導するとゲートが開きます。');
+        setLunaHint('ゴールゲート（G）。アバターを誘導すると次の試練への扉が開きます。');
       } else if (clickedCell === '#') {
-        setLunaHint('遮断された壁面です。通過できません。');
+        setLunaHint('切り立った石壁です。通行不能。');
       }
     }
   };
@@ -360,37 +352,38 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        borderBottom: '1px solid rgba(197, 160, 89, 0.25)',
         paddingBottom: '1rem'
       }}>
         <div style={{ textAlign: 'left' }}>
-          <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '700' }}>
-            GATE 0{levelIndex + 1} / 03
+          <div style={{ fontSize: '0.8rem', color: 'var(--border-gold)', fontWeight: '900', fontFamily: 'Cinzel, serif' }}>
+            TRIAL 0{levelIndex + 1} / 03
           </div>
-          <h2 style={{ fontSize: '1.35rem', marginTop: '0.2rem' }}>{currentLevel.name}</h2>
+          <h2 style={{ fontSize: '1.45rem', marginTop: '0.2rem', fontFamily: 'Noto Serif JP, serif' }}>{currentLevel.name}</h2>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{currentLevel.description}</p>
         </div>
 
-        {/* Level indicators */}
+        {/* Level Gem Indicators */}
         <div style={{ display: 'flex', gap: '8px' }}>
           {[0, 1, 2].map(idx => (
             <div
               key={idx}
               style={{
-                width: '32px',
-                height: '6px',
-                borderRadius: '3px',
-                background: idx === levelIndex ? 'var(--primary)' : idx < levelIndex ? 'rgba(16, 185, 129, 0.4)' : 'rgba(255,255,255,0.06)',
-                boxShadow: idx === levelIndex ? '0 0 10px var(--primary-glow)' : 'none'
+                width: '14px',
+                height: '14px',
+                transform: 'rotate(45deg)',
+                background: idx === levelIndex ? 'var(--border-gold)' : idx < levelIndex ? '#1b8577' : 'rgba(197,160,89,0.06)',
+                border: '1px solid rgba(197, 160, 89, 0.3)',
+                boxShadow: idx === levelIndex ? '0 0 10px var(--border-gold)' : 'none'
               }}
             />
           ))}
         </div>
       </div>
 
-      {/* Main Layout: Grid on Left, Info HUD on Right */}
+      {/* Main Layout */}
       <div className="puzzle-layout">
-        {/* Left Side: Interactive Grid Map */}
+        {/* Left Side: Map Grid */}
         <div className="puzzle-grid-wrapper">
           <div style={{
             display: 'grid',
@@ -413,7 +406,6 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
                 const tileKey = `${r},${c}`;
                 const crumbleCount = crumblingTiles[tileKey] || 0;
                 
-                // Determine styling
                 let cellClass = 'grid-cell cell-floor';
                 if (isWall) cellClass = 'grid-cell cell-wall';
                 else if (isCrumbling) cellClass = `grid-cell cell-floor cell-crumbling ${crumbleCount > 0 ? 'stepped' : ''}`;
@@ -426,12 +418,12 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
                     onClick={() => handleCellClick(r, c)}
                     style={{ cursor: isWall ? 'default' : 'pointer' }}
                   >
-                    {/* Render Player Avatar */}
+                    {/* Render Player (Knight's Shield) */}
                     {isPlayer && (
-                      <div className="grid-item player-core" />
+                      <div className="grid-item player-core" style={{ borderRadius: '4px' }} />
                     )}
 
-                    {/* Render Goal Exit */}
+                    {/* Render Goal Portal */}
                     {!isPlayer && isGoal && (
                       <div className="grid-item goal-core" />
                     )}
@@ -445,39 +437,42 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
 
                     {/* Render Chest */}
                     {!isPlayer && isChest && (
-                      <div className={`grid-item item-chest ${chestOpened ? 'opened' : ''}`}>
+                      <div className="grid-item item-chest">
                         {chestOpened ? <Unlock size={18} /> : <Lock size={18} />}
                       </div>
                     )}
 
-                    {/* Render Crumbling Crack graphic */}
-                    {!isPlayer && isCrumbling && crumbleCount > 0 && (
+                    {/* Render crumbling cracks */}
+                    {!isPlayer && isCrumbling && (
                       <div style={{
-                        fontSize: '0.6rem',
+                        fontSize: '0.45rem',
                         fontWeight: '900',
-                        color: 'rgba(239, 68, 68, 0.7)',
+                        color: crumbleCount > 0 ? '#ef4444' : '#8a6c50',
                         position: 'absolute',
-                        inset: 0,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
+                        bottom: '2px',
+                        width: '100%',
+                        textAlign: 'center',
+                        fontFamily: 'monospace'
                       }}>
-                        CRACK
+                        {crumbleCount > 0 ? 'CRACKED' : 'WOOD'}
                       </div>
                     )}
 
-                    {/* Render Laser warnings */}
+                    {/* Render electric lightning warning */}
                     {!isPlayer && isLaser && (
                       <div style={{
-                        width: '4px',
-                        height: '100%',
-                        background: lasersActive ? '#ef4444' : 'rgba(239, 68, 68, 0.2)',
-                        boxShadow: lasersActive ? '0 0 10px #ef4444' : 'none',
                         position: 'absolute',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        transition: 'background 0.1s'
-                      }} />
+                        inset: '2px',
+                        border: lasersActive ? '2px solid #d99126' : '1px dashed rgba(217, 145, 38, 0.2)',
+                        borderRadius: '2px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: lasersActive ? 'rgba(217, 145, 38, 0.25)' : 'none',
+                        transition: 'all 0.1s'
+                      }}>
+                        <Zap size={10} style={{ color: lasersActive ? '#d99126' : 'rgba(217, 145, 38, 0.15)' }} />
+                      </div>
                     )}
                   </div>
                 );
@@ -486,58 +481,54 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
           </div>
         </div>
 
-        {/* Right Side: Information and HUD Controller */}
+        {/* Right Side: HUD */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           
-          {/* Mini Companion Textbox */}
+          {/* Ornate Dialog Hint bubble */}
           <div style={{
-            background: 'rgba(0, 229, 255, 0.03)',
-            border: '1px solid rgba(0, 229, 255, 0.12)',
-            borderRadius: '12px',
+            background: 'rgba(197, 160, 89, 0.04)',
+            border: '2px solid rgba(197, 160, 89, 0.2)',
+            borderRadius: '2px',
             padding: '1rem',
             textAlign: 'left'
           }}>
-            <div style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '0.25rem' }}>
-              ルナの分析
+            <div style={{ fontSize: '0.75rem', fontWeight: '900', color: 'var(--border-gold)', marginBottom: '0.3rem', fontFamily: 'Cinzel, serif' }}>
+              ❈ LUNA'S OBSERVATION
             </div>
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', lineHeight: '1.5' }}>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', lineHeight: '1.6' }}>
               {lunaHint}
             </div>
           </div>
 
-          {/* Hud Telemetry Card */}
+          {/* HUD Status sheet */}
           <div className="hud-card">
             <div className="hud-row">
-              <span className="hud-label">歩数 (Steps)</span>
-              <span className="hud-value" style={{ fontFamily: 'monospace' }}>{steps}</span>
+              <span className="hud-label">消費歩数 (STEPS)</span>
+              <span className="hud-value">{steps}</span>
             </div>
             <div className="hud-row">
-              <span className="hud-label">所持キー (Key)</span>
-              <span className="hud-value" style={{ color: hasKey ? '#fbbf24' : 'var(--text-dim)' }}>
+              <span className="hud-label">所持キー (KEY)</span>
+              <span className="hud-value" style={{ color: hasKey ? '#c5a059' : 'var(--text-dim)' }}>
                 {hasKey ? '1 / 1' : '0 / 1'}
               </span>
             </div>
             <div className="hud-row">
-              <span className="hud-label">星の獲得 (Star)</span>
-              <span className="hud-value" style={{ display: 'flex', alignItems: 'center', gap: '4px', color: starCollected ? '#fbbf24' : 'var(--text-dim)' }}>
-                <Star size={16} fill={starCollected ? '#fbbf24' : 'none'} />
+              <span className="hud-label">秘宝スター (STAR)</span>
+              <span className="hud-value" style={{ display: 'flex', alignItems: 'center', gap: '4px', color: starCollected ? '#d99126' : 'var(--text-dim)' }}>
+                <Star size={14} fill={starCollected ? '#d99126' : 'none'} />
                 <span>{starCollected ? 'Collected' : 'None'}</span>
               </span>
             </div>
           </div>
 
-          {/* Controls: Undo and Reset */}
+          {/* Action triggers */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-            <button className="cyber-btn-sec" onClick={handleUndo} disabled={history.length === 0} style={{
-              justifyContent: 'center',
-              opacity: history.length === 0 ? 0.4 : 1,
-              cursor: history.length === 0 ? 'default' : 'pointer'
-            }}>
-              <RotateCcw size={16} />
+            <button className="cyber-btn-sec" onClick={handleUndo} disabled={history.length === 0} style={{ justifyContent: 'center' }}>
+              <RotateCcw size={14} />
               <span>Undo</span>
             </button>
             <button className="cyber-btn-sec" onClick={handleReset} style={{ justifyContent: 'center' }}>
-              <RotateCcw size={16} />
+              <RotateCcw size={14} />
               <span>Reset</span>
             </button>
           </div>
@@ -545,33 +536,33 @@ export default function PuzzleScreen({ onPuzzleComplete }) {
         </div>
       </div>
 
-      {/* Mobile D-Pad Control Panel */}
+      {/* D-Pad styled as heavy iron vintage directional buttons */}
       <div style={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         gap: '4px',
         marginTop: '0.5rem',
-        borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+        borderTop: '1px dashed rgba(197, 160, 89, 0.2)',
         paddingTop: '1.25rem'
       }}>
-        <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginBottom: '0.5rem' }}>
-          MOBILE CONTROL D-PAD
+        <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginBottom: '0.5rem', fontFamily: 'Cinzel, serif' }}>
+          TACTICAL INTERACTIVE D-PAD
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-          <button className="cyber-btn-sec" onClick={() => movePlayer(-1, 0)} style={{ padding: '0.5rem 1.25rem' }}>
+          <button className="cyber-btn-sec" onClick={() => movePlayer(-1, 0)} style={{ padding: '0.5rem 1.5rem', background: '#252936' }}>
             <ArrowUp size={18} />
           </button>
           <div style={{ display: 'flex', gap: '8px' }}>
-            <button className="cyber-btn-sec" onClick={() => movePlayer(0, -1)} style={{ padding: '0.5rem 1.25rem' }}>
+            <button className="cyber-btn-sec" onClick={() => movePlayer(0, -1)} style={{ padding: '0.5rem 1.5rem', background: '#252936' }}>
               <ArrowLeft size={18} />
             </button>
-            <div style={{ width: '42px' }} />
-            <button className="cyber-btn-sec" onClick={() => movePlayer(0, 1)} style={{ padding: '0.5rem 1.25rem' }}>
+            <div style={{ width: '46px' }} />
+            <button className="cyber-btn-sec" onClick={() => movePlayer(0, 1)} style={{ padding: '0.5rem 1.5rem', background: '#252936' }}>
               <ArrowRight size={18} />
             </button>
           </div>
-          <button className="cyber-btn-sec" onClick={() => movePlayer(1, 0)} style={{ padding: '0.5rem 1.25rem' }}>
+          <button className="cyber-btn-sec" onClick={() => movePlayer(1, 0)} style={{ padding: '0.5rem 1.5rem', background: '#252936' }}>
             <ArrowDown size={18} />
           </button>
         </div>

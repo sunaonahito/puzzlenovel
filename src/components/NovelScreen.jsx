@@ -6,84 +6,84 @@ export default function NovelScreen({ stage, onChoiceSelected, onComplete }) {
   const [displayedText, setDisplayedText] = useState('');
   const [isTypingComplete, setIsTypingComplete] = useState(false);
 
-  // Dialog dialogues based on stage (intro / outro)
+  // Classical medieval visual novel dialogue configuration
   const introDialogues = [
     {
-      speaker: 'ルナ',
-      text: '起動を確認しました。ようこそ、被検体。私はシステムオブザーバーの「ルナ」です。これより、あなたの「認知・行動スタイル診断」を開始します。'
+      speaker: '運命の観測者 ルナ',
+      text: '魂の共鳴を確認しました。ようこそ、旅人よ。私はこの世界の星盤を観測する者、「ルナ」です。これより、あなたの「認知・アライメント診断」を開始します。'
     },
     {
-      speaker: 'ルナ',
-      text: 'これから、あなたには3つのパズルゲートを攻略していただきます。あなたの移動速度、戸惑い、やり直し（Undo）、そして選択の一つ一つがリアルタイムでスコア化されます。'
+      speaker: '運命の観測者 ルナ',
+      text: 'これから、あなたには3つの試練の迷宮ゲートを攻略していただきます。あなたの移動速度、迷い、時の巻き戻し（Undo）、そして選択肢の一つ一つがリアルタイムで属性値としてスコア化されます。'
     },
     {
-      speaker: 'ルナ',
-      text: 'テストを始める前に、1つ教えてください。あなたは普段、未知の問題や障害に直面したとき、どのように行動しますか？',
+      speaker: '運命の観測者 ルナ',
+      text: '試練を始める前に、1つ教えてください。あなたは普段、未知の災いや障害に直面したとき、どのように立ち向かいますか？',
       choices: [
         {
-          text: '考えるよりも先に、まず行動して試行錯誤する。',
+          text: '考えるよりも先に、まず手元の剣を振るって試行錯誤する。',
           value: { planningVsIntuition: -15, solidVsBold: 0 },
-          label: '直感型'
+          label: '直感属性'
         },
         {
-          text: '全ての選択肢とリスクを整理し、計画を立ててから動く。',
+          text: '全ての選択肢とリスクを天秤にかけ、計画を立ててから進む。',
           value: { planningVsIntuition: 15, solidVsBold: 0 },
-          label: '計画型'
+          label: '計画属性'
         },
         {
-          text: '過去の事例や、最も安全で確実なルートを探す。',
+          text: '過去の記録を調べ、最も安全で確実なルートを探す。',
           value: { planningVsIntuition: 0, solidVsBold: -15 },
-          label: '堅実型'
+          label: '堅実属性'
         }
       ]
     },
     {
-      speaker: 'ルナ',
-      text: 'なるほど、あなたの自己認識は分かりました。それでは、実際の行動がどうであるか、確かめてみましょう。最初のゲートを開放します。'
+      speaker: '運命の観測者 ルナ',
+      text: 'なるほど、あなたの自己認識は受け取りました。それでは、実際の行動がどうであるか、天秤にかけましょう。最初のゲートを開放します。'
     }
   ];
 
   const outroDialogues = [
     {
-      speaker: 'ルナ',
-      text: 'すべてのテストエリアの攻略、お見事でした。あなたのアバターの軌跡と、ジレンマ点での行動データを完全に収集しました。'
+      speaker: '運命の観測者 ルナ',
+      text: 'すべての試練エリアの攻略、お見事でした。あなたのアバターの軌跡と、ジレンマ点での行動データを星盤に記録しました。'
     },
     {
-      speaker: 'ルナ',
-      text: '診断結果を解析する前に、最後の質問です。パズルを解いている最中、あなたはどのような気持ちでしたか？',
+      speaker: '運命の観測者 ルナ',
+      text: '属性アライメントを判定する前に、最後の質問です。迷宮を攻略している最中、あなたはどのような瞬間に充実感を覚えましたか？',
       choices: [
         {
-          text: 'リスクを取って近道（ショートカット）を狙うのが快感だった。',
+          text: '危険なショートカットを駆け抜け、リスクを制覇した瞬間。',
           value: { planningVsIntuition: 0, solidVsBold: 15 },
           label: '大胆'
         },
         {
-          text: '罠や危険を確実に回避して、ミスなく進むことに安心した。',
+          text: '罠や崩壊を完璧に回避し、無傷で安全に進みきった瞬間。',
           value: { planningVsIntuition: 0, solidVsBold: -15 },
           label: '堅実'
         },
         {
-          text: '直感でスピーディに操作する瞬間が一番楽しかった。',
+          text: '直感とひらめきで、淀みなくスピーディに操作できた瞬間。',
           value: { planningVsIntuition: -15, solidVsBold: 0 },
           label: '直感'
         },
         {
-          text: 'じっくりと考えて、手数を最小限に抑える解法にこだわった。',
+          text: 'すべての手を熟考し、最小の歩数で完璧な解法にたどり着いた瞬間。',
           value: { planningVsIntuition: 15, solidVsBold: 0 },
           label: '計画'
         }
       ]
     },
     {
-      speaker: 'ルナ',
-      text: 'ありがとうございます。自己申告データと行動ログの突き合わせが完了しました。それでは、あなたの本質的なスタイルをマップに描きます。結果をご覧ください。'
+      speaker: '運命の観測者 ルナ',
+      text: 'ありがとうございます。自己申告データと行動ログの突き合わせが完了しました。それでは、あなたのアライメントを方位盤に描きます。運命をご覧ください。'
     }
   ];
 
   const dialogues = stage === 'intro' ? introDialogues : outroDialogues;
   const currentDialogue = dialogues[currentStep];
 
-  // Typewriter effect logic
+  // Slice-based typewriter logic (robust against strict mode race conditions)
   useEffect(() => {
     if (!currentDialogue) return;
     setIsTypingComplete(false);
@@ -91,8 +91,8 @@ export default function NovelScreen({ stage, onChoiceSelected, onComplete }) {
 
     let index = 0;
     const interval = setInterval(() => {
-      setDisplayedText((prev) => prev + currentDialogue.text.charAt(index));
       index++;
+      setDisplayedText(currentDialogue.text.slice(0, index));
       if (index >= currentDialogue.text.length) {
         clearInterval(interval);
         setIsTypingComplete(true);
@@ -104,7 +104,6 @@ export default function NovelScreen({ stage, onChoiceSelected, onComplete }) {
 
   const handleNext = () => {
     if (!isTypingComplete) {
-      // Skip typing
       setDisplayedText(currentDialogue.text);
       setIsTypingComplete(true);
       return;
@@ -138,13 +137,13 @@ export default function NovelScreen({ stage, onChoiceSelected, onComplete }) {
       alignItems: 'center',
       gap: '2rem'
     }}>
-      {/* Companion Luna animated avatar */}
+      {/* Magic fortune crystal avatar */}
       <div className="companion-avatar">
         <div className="companion-ring-outer"></div>
         <div className="companion-ring"></div>
         <div className="companion-core" style={{
-          background: stage === 'intro' ? 'var(--primary)' : 'rgba(168, 85, 247, 1)',
-          boxShadow: stage === 'intro' ? '0 0 30px 8px rgba(0, 229, 255, 0.4)' : '0 0 30px 8px rgba(168, 85, 247, 0.4)'
+          background: stage === 'intro' ? 'radial-gradient(circle, #fcf4e8 0%, #c5a059 60%, #30220f 100%)' : 'radial-gradient(circle, #fcf4e8 0%, #8c42d9 60%, #1f0b38 100%)',
+          boxShadow: stage === 'intro' ? '0 0 25px 6px rgba(197, 160, 89, 0.45)' : '0 0 25px 6px rgba(140, 66, 217, 0.45)'
         }}></div>
       </div>
 
@@ -157,7 +156,7 @@ export default function NovelScreen({ stage, onChoiceSelected, onComplete }) {
           </div>
         </div>
 
-        {/* Branching choices if available */}
+        {/* Branching choice options */}
         {isTypingComplete && currentDialogue.choices ? (
           <div className="choices-grid">
             {currentDialogue.choices.map((choice, i) => (
@@ -172,7 +171,7 @@ export default function NovelScreen({ stage, onChoiceSelected, onComplete }) {
             ))}
           </div>
         ) : (
-          /* Plain next button if no choices */
+          /* Next / skip click trigger */
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
             <button className="cyber-btn" onClick={handleNext}>
               <span>{isTypingComplete ? '次へ' : 'スキップ'}</span>
@@ -182,20 +181,21 @@ export default function NovelScreen({ stage, onChoiceSelected, onComplete }) {
         )}
       </div>
 
-      {/* Progress Indicator */}
+      {/* Progress Gems */}
       <div style={{
         display: 'flex',
-        gap: '6px',
+        gap: '8px',
         alignItems: 'center'
       }}>
         {dialogues.map((_, i) => (
           <div
             key={i}
             style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              background: i === currentStep ? 'var(--primary)' : 'rgba(255, 255, 255, 0.1)',
+              width: '10px',
+              height: '10px',
+              transform: 'rotate(45deg)',
+              background: i === currentStep ? 'var(--border-gold)' : 'rgba(197, 160, 89, 0.15)',
+              border: '1px solid rgba(197, 160, 89, 0.3)',
               transition: 'background 0.3s'
             }}
           />
